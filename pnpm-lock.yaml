@@ -1,0 +1,25 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@stencil/core': ^2.18.1
+  typescript: ^4.8.4
+
+dependencies:
+  '@stencil/core': 2.18.1
+
+devDependencies:
+  typescript: 4.8.4
+
+packages:
+
+  /@stencil/core/2.18.1:
+    resolution: {integrity: sha512-/fXkh1lwZ+X9JQCw50mPjhBogzEHOBvVC5pLoDLZqodVYK0DGWILM2YLV4dcIUBNEK8/HMDpO/Rq81/rS3mNOw==}
+    engines: {node: '>=12.10.0', npm: '>=6.0.0'}
+    hasBin: true
+    dev: false
+
+  /typescript/4.8.4:
+    resolution: {integrity: sha512-QCh+85mCy+h0IGff8r5XWzOVSbBO+KfeYrMQh7NJ58QujwcE22u+NUSmUxqF+un70P9GXKxa2HCNiTTMJknyjQ==}
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+    dev: true
