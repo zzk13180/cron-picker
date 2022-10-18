@@ -1,37 +1,34 @@
 {
   "name": "cron-picker",
+  "private": true,
   "version": "0.0.1",
   "description": "A Web Component for generating cron expressions",
   "license": "MIT",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.js",
-  "es2015": "dist/esm/index.mjs",
-  "es2017": "dist/esm/index.mjs",
-  "types": "dist/types/index.d.ts",
-  "collection": "dist/collection/collection-manifest.json",
-  "collection:main": "dist/collection/index.js",
-  "unpkg": "dist/cron-picker/cron-picker.esm.js",
-  "author": "zhangzhankui <zzk13180@gmail.com> (https://zhangzhankui.com)",
+  "author": "zhangzhankui <zzk13180@gmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/zzk13180/cron-picker.git"
   },
   "files": [
-    "dist/",
-    "loader/"
+    "dist",
+    "types"
   ],
   "keywords": [
     "cron",
     "web component"
   ],
   "scripts": {
-    "dev": "stencil build --dev --watch --serve",
-    "build": "stencil build --docs"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@stencil/core": "^2.18.1"
+    "lit": "^2.4.0"
   },
   "devDependencies": {
-    "typescript": "^4.8.4"
+    "@types/node": "^16.9.4",
+    "sass": "^1.55.0",
+    "typescript": "^4.8.4",
+    "vite": "^3.1.8"
   }
 }
