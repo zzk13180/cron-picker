@@ -8,6 +8,12 @@ export type CronFieldType = 'second' | 'minute' | 'hour' | 'day' | 'month' | 'we
 /** 模式类型 */
 export type CronMode = 'every' | 'specific' | 'range' | 'interval'
 
+/** UI 模式类型 */
+export type UIMode = 'simple' | 'advanced'
+
+/** 重复类型 */
+export type RepeatType = 'once' | 'daily' | 'weekdays' | 'weekends' | 'custom'
+
 /** 字段配置 */
 export interface CronFieldConfig {
   label: string
@@ -47,8 +53,14 @@ export declare const WEEKDAY_LABELS: string[]
 /** 月份标签 */
 export declare const MONTH_LABELS: string[]
 
-/** 模式标签 */
+/** 模式基础标签 */
 export declare const MODE_LABELS: Record<CronMode, string>
+
+/** 字段对应的「每」模式标签 */
+export declare const EVERY_MODE_LABELS: Record<CronFieldType, string>
+
+/** 获取模式标签（根据字段类型动态显示） */
+export declare const getModeLabel: (mode: CronMode, fieldType: CronFieldType) => string
 
 // ==================== 组件定义 ====================
 
@@ -65,6 +77,7 @@ export declare const MODE_LABELS: Record<CronMode, string>
  * @prop {boolean} hide-tabs - 隐藏标签页
  * @prop {boolean} hide-actions - 隐藏快捷操作按钮
  * @prop {boolean} disabled - 禁用状态
+ * @prop {UIMode} mode - UI 模式（简易或高级）
  *
  * @fires {CustomEvent<CronChangeEventDetail>} change - 表达式变化时触发
  * @fires {CustomEvent<{field: CronFieldType}>} field-change - 切换字段时触发
@@ -84,6 +97,13 @@ export declare const MODE_LABELS: Record<CronMode, string>
  * @csspart cell-label - 值选择标签
  * @csspart actions - 快捷操作容器
  * @csspart action-btn - 快捷操作按钮
+ * @csspart simple-mode - 简易模式容器
+ * @csspart simple-header - 简易模式标题
+ * @csspart simple-description - 实时预览描述
+ * @csspart simple-field - 简易模式字段
+ * @csspart weekday-grid - 星期选择网格
+ * @csspart weekday-item - 星期选择项
+ * @csspart mode-toggle-btn - 模式切换按钮
  *
  * @cssprop --cron-primary - 主题色
  * @cssprop --cron-primary-hover - 主题色悬停
@@ -104,8 +124,11 @@ export declare const MODE_LABELS: Record<CronMode, string>
  *
  * @example
  * ```html
- * <!-- 基础用法 -->
- * <cron-picker value="0 0 12 * * *"></cron-picker>
+ * <!-- 基础用法（默认简易模式） -->
+ * <cron-picker value="0 0 8 * * *"></cron-picker>
+ *
+ * <!-- 高级模式 -->
+ * <cron-picker mode="advanced" value="0 0 12 * * *"></cron-picker>
  *
  * <!-- 无头模式 -->
  * <cron-picker headless value="* * * * * *"></cron-picker>
@@ -149,6 +172,9 @@ export declare class CronPicker extends LitElement {
   /** 禁用状态 */
   disabled: boolean
 
+  /** UI 模式（简易或高级） */
+  mode: UIMode
+
   /** 当前激活的字段 */
   activeField: CronFieldType
 
@@ -181,6 +207,9 @@ export declare class CronPicker extends LitElement {
 
   /** 获取值标签 */
   getValueLabel(field: CronFieldType, value: number): string
+
+  /** 获取 Cron 表达式的人类可读描述 */
+  getDescription(): string
 
   render(): TemplateResult<1>
 }

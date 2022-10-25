@@ -3,115 +3,123 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cron-picker</title>
+  <title>cron-picker - Material Design 3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script type="module" src="/src/cron-picker.ts"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: #f1f5f9;
+      font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+      background: #F7F2FA;
       min-height: 100vh;
-      padding: 40px 20px;
+      padding: 16px;
     }
 
+    /* 移动优先：默认针对手机 */
     .page {
-      max-width: 900px;
+      max-width: 600px;
       margin: 0 auto;
     }
 
     h1 {
-      font-size: 24px;
-      font-weight: 600;
-      color: #1e293b;
-      margin-bottom: 8px;
+      font-size: 28px;
+      font-weight: 400;
+      color: #1C1B1F;
+      margin-bottom: 4px;
     }
 
     .subtitle {
-      color: #64748b;
-      margin-bottom: 32px;
+      color: #49454F;
+      margin-bottom: 24px;
+      font-size: 14px;
     }
 
     .section {
-      background: white;
+      background: #FFFBFE;
       border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 0;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px 1px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 16px 20px;
+      background: #F3EDF7;
     }
 
     .section h2 {
-      font-size: 16px;
-      font-weight: 600;
-      color: #1e293b;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #e2e8f0;
+      font-size: 14px;
+      font-weight: 500;
+      color: #49454F;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-content {
+      padding: 0;
     }
 
     .result {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-top: 16px;
-      padding: 12px;
-      background: #f8fafc;
-      border-radius: 8px;
+      padding: 16px 20px;
+      background: #F3EDF7;
     }
 
     .result-label {
-      color: #64748b;
-      font-size: 13px;
+      color: #49454F;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .result-value {
-      font-family: ui-monospace, monospace;
+      font-family: 'Roboto Mono', ui-monospace, monospace;
       font-size: 14px;
-      font-weight: 600;
-      color: #6366f1;
+      font-weight: 500;
+      color: #6750A4;
       flex: 1;
     }
 
     .copy-btn {
-      padding: 6px 12px;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      background: white;
-      color: #64748b;
-      font-size: 12px;
+      height: 36px;
+      padding: 0 16px;
+      border: none;
+      border-radius: 8px;
+      background: #E8DEF8;
+      color: #1D192B;
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.2s;
     }
 
     .copy-btn:hover {
-      border-color: #6366f1;
-      color: #6366f1;
+      background: #D0BCFF;
+    }
+
+    .copy-btn:active {
+      transform: scale(0.98);
     }
 
     .copy-btn.copied {
-      background: #10b981;
-      border-color: #10b981;
+      background: #6750A4;
       color: white;
     }
 
     /* 自定义样式示例 */
     .custom-theme {
-      --cron-primary: #10b981;
-      --cron-primary-bg: rgba(16, 185, 129, 0.1);
-      --cron-border-active: #10b981;
-    }
-
-    .custom-theme::part(container) {
-      border-radius: 16px;
-      border: 2px solid #e2e8f0;
-    }
-
-    .custom-theme::part(segment) {
-      border-radius: 8px;
-    }
-
-    .custom-theme::part(mode-btn) {
-      border-radius: 999px;
+      --md-sys-color-primary: #006A6A;
+      --md-sys-color-on-primary: #FFFFFF;
+      --md-sys-color-primary-container: #6FF7F6;
+      --md-sys-color-on-primary-container: #002020;
+      --md-sys-color-secondary-container: #CCE8E7;
     }
 
     /* API 演示区 */
@@ -119,127 +127,230 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 16px;
+      padding: 16px 20px;
     }
 
     .api-btn {
-      padding: 8px 16px;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      background: white;
-      color: #475569;
-      font-size: 13px;
+      height: 40px;
+      padding: 0 24px;
+      border: 1px solid #CAC4D0;
+      border-radius: 8px;
+      background: transparent;
+      color: #6750A4;
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.2s;
     }
 
     .api-btn:hover {
-      border-color: #6366f1;
-      color: #6366f1;
-      background: #f8fafc;
+      background: #E8DEF8;
+    }
+
+    .api-btn:active {
+      transform: scale(0.98);
     }
 
     .log {
-      margin-top: 16px;
-      padding: 12px;
-      background: #1e293b;
-      border-radius: 8px;
-      font-family: ui-monospace, monospace;
-      font-size: 12px;
-      color: #94a3b8;
-      max-height: 150px;
+      margin: 0;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #1a1625 0%, #1C1B1F 50%, #1e1a24 100%);
+      font-family: 'Roboto Mono', ui-monospace, monospace;
+      font-size: 13px;
+      color: #E6E1E5;
+      max-height: 180px;
       overflow: auto;
+      border-top: 1px solid rgba(208, 188, 255, 0.1);
+    }
+
+    .log:empty::before {
+      content: '暂无日志记录...';
+      color: #79747E;
+      font-style: italic;
     }
 
     .log-item {
-      padding: 4px 0;
-      border-bottom: 1px solid #334155;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 14px;
+      margin: 6px 0;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      border-left: 3px solid #D0BCFF;
+      transition: all 0.2s ease;
+      animation: slideIn 0.3s ease-out;
     }
 
-    .log-item:last-child {
-      border-bottom: none;
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .log-item:hover {
+      background: rgba(208, 188, 255, 0.08);
+    }
+
+    .log-item:first-child {
+      border-left-color: #6750A4;
+      background: rgba(103, 80, 164, 0.12);
     }
 
     .log-time {
-      color: #64748b;
-      margin-right: 8px;
+      color: #938F99;
+      font-size: 11px;
+      font-weight: 500;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .log-action {
+      color: #CAC4D0;
+      font-weight: 500;
     }
 
     .log-value {
-      color: #22d3ee;
+      color: #D0BCFF;
+      font-weight: 600;
+      background: rgba(208, 188, 255, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* 平板及以上响应式 */
+    @media (min-width: 600px) {
+      body {
+        padding: 24px;
+      }
+
+      .page {
+        max-width: 840px;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      .section {
+        margin-bottom: 24px;
+      }
+    }
+
+    /* 桌面响应式 */
+    @media (min-width: 905px) {
+      body {
+        padding: 40px;
+      }
+
+      .page {
+        max-width: 1200px;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .subtitle {
+        font-size: 16px;
+        margin-bottom: 32px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="page">
-    <h1>cron-picker</h1>
-    <p class="subtitle">Cron 表达式选择器 Web Component</p>
+    <h1>Cron Picker</h1>
+    <p class="subtitle">Material Design 3 风格的 Cron 表达式选择器</p>
 
-    <!-- 基础用法 -->
+    <!-- 简易模式演示 -->
     <div class="section">
-      <h2>基础用法</h2>
-      <cron-picker id="basic" value="0 0 12 * * *"></cron-picker>
+      <div class="section-header">
+        <h2>简易模式</h2>
+      </div>
+      <div class="section-content">
+        <cron-picker id="simple-mode" mode="simple" value="0 0 8 * * *"></cron-picker>
+      </div>
       <div class="result">
-        <span class="result-label">表达式：</span>
-        <span class="result-value" id="basic-value">0 0 12 * * *</span>
-        <button class="copy-btn" data-target="basic-value">复制</button>
+        <span class="result-label">表达式</span>
+        <span class="result-value" id="simple-value">0 0 8 * * *</span>
+        <button class="copy-btn" data-target="simple-value">复制</button>
       </div>
     </div>
 
-    <!-- 自定义样式 -->
+    <!-- 高级模式演示 -->
     <div class="section">
-      <h2>自定义样式</h2>
-      <cron-picker class="custom-theme" id="custom" value="*/5 * * * * *"></cron-picker>
+      <div class="section-header">
+        <h2>高级模式</h2>
+      </div>
+      <div class="section-content">
+        <cron-picker id="advanced-mode" mode="advanced" value="0 0 12 * * *"></cron-picker>
+      </div>
       <div class="result">
-        <span class="result-label">表达式：</span>
-        <span class="result-value" id="custom-value">*/5 * * * * *</span>
+        <span class="result-label">表达式</span>
+        <span class="result-value" id="advanced-value">0 0 12 * * *</span>
+        <button class="copy-btn" data-target="advanced-value">复制</button>
+      </div>
+    </div>
+
+    <!-- 自定义主题 -->
+    <div class="section">
+      <div class="section-header">
+        <h2>自定义主题色</h2>
+      </div>
+      <div class="section-content">
+        <cron-picker class="custom-theme" id="custom" mode="simple" value="0 30 9 * * 1-5"></cron-picker>
+      </div>
+      <div class="result">
+        <span class="result-label">表达式</span>
+        <span class="result-value" id="custom-value">0 30 9 * * 1-5</span>
         <button class="copy-btn" data-target="custom-value">复制</button>
       </div>
     </div>
 
     <!-- API 演示 -->
     <div class="section">
-      <h2>API 演示</h2>
+      <div class="section-header">
+        <h2>API 演示</h2>
+      </div>
       <div class="api-demo">
         <button class="api-btn" id="btn-reset">重置</button>
         <button class="api-btn" id="btn-every-minute">每分钟</button>
         <button class="api-btn" id="btn-every-hour">每小时</button>
         <button class="api-btn" id="btn-every-day">每天中午</button>
         <button class="api-btn" id="btn-workday">工作日 9 点</button>
-        <button class="api-btn" id="btn-weekend">周末</button>
       </div>
-      <cron-picker id="api-demo"></cron-picker>
+      <div class="section-content">
+        <cron-picker id="api-demo" mode="advanced"></cron-picker>
+      </div>
       <div class="log" id="log"></div>
-    </div>
-
-    <!-- 简洁模式 -->
-    <div class="section">
-      <h2>隐藏部分元素</h2>
-      <cron-picker id="minimal" hide-expression hide-actions value="0 0 * * * *"></cron-picker>
-      <div class="result">
-        <span class="result-label">表达式：</span>
-        <span class="result-value" id="minimal-value">0 0 * * * *</span>
-      </div>
     </div>
   </div>
 
   <script type="module">
-    // 基础用法
-    const basic = document.getElementById('basic')
-    basic.addEventListener('change', (e) => {
-      document.getElementById('basic-value').textContent = e.detail.value
+    // 简易模式
+    const simpleMode = document.getElementById('simple-mode')
+    simpleMode.addEventListener('change', (e) => {
+      document.getElementById('simple-value').textContent = e.detail.value
     })
 
-    // 自定义样式
+    // 高级模式
+    const advancedMode = document.getElementById('advanced-mode')
+    advancedMode.addEventListener('change', (e) => {
+      document.getElementById('advanced-value').textContent = e.detail.value
+    })
+
+    // 自定义主题
     const custom = document.getElementById('custom')
     custom.addEventListener('change', (e) => {
       document.getElementById('custom-value').textContent = e.detail.value
-    })
-
-    // 简洁模式
-    const minimal = document.getElementById('minimal')
-    minimal.addEventListener('change', (e) => {
-      document.getElementById('minimal-value').textContent = e.detail.value
     })
 
     // API 演示
@@ -250,8 +361,12 @@
       const time = new Date().toLocaleTimeString()
       const item = document.createElement('div')
       item.className = 'log-item'
-      item.innerHTML = `<span class="log-time">${time}</span>${action}: <span class="log-value">${value}</span>`
+      item.innerHTML = `<span class="log-time">${time}</span><span class="log-action">${action}:</span> <span class="log-value">${value}</span>`
       log.insertBefore(item, log.firstChild)
+      // 限制日志数量
+      while (log.children.length > 20) {
+        log.removeChild(log.lastChild)
+      }
     }
 
     apiDemo.addEventListener('change', (e) => {
@@ -281,12 +396,6 @@
     document.getElementById('btn-workday').addEventListener('click', () => {
       apiDemo.parse('0 0 9 * * 1-5')
       addLog('设置', '工作日 9 点')
-    })
-
-    document.getElementById('btn-weekend').addEventListener('click', () => {
-      apiDemo.setFieldMode('weekday', 'specific')
-      apiDemo.setFieldValues('weekday', [0, 6])
-      addLog('API 调用', 'setFieldValues(weekday, [0, 6])')
     })
 
     // 复制按钮

@@ -1,10 +1,14 @@
 # cron-picker
 
-一个用于生成 Cron 表达式的 Web Component，基于 [Lit](https://lit.dev) 构建，支持无头模式。
+一个用于生成 Cron 表达式的 Web Component，基于 [Lit](https://lit.dev) 构建，支持简易模式与高级模式。
 
 ## 特性
 
 - 🎯 **6 段式 Cron 表达式**：秒、分、时、日、月、周
+- ✨ **简易模式**：提供直观的时间选择和重复规则设置
+- 🔧 **高级模式**：支持精确控制每个时间维度
+- 📱 **响应式设计**：完美适配移动端和桌面端
+- 👀 **实时预览**：人类可读的 Cron 表达式描述
 - 🎨 **无头模式**：完全自定义样式
 - 🔧 **丰富的 API**：编程式控制
 - 📦 **零依赖**：仅依赖 Lit
@@ -19,12 +23,15 @@ pnpm add cron-picker
 
 ## 快速开始
 
+### 简易模式（默认）
+
 ```html
 <script type="module">
   import 'cron-picker'
 </script>
 
-<cron-picker value="0 0 12 * * *"></cron-picker>
+<!-- 简易模式：适合大多数常见场景 -->
+<cron-picker mode="simple" value="0 0 8 * * *"></cron-picker>
 
 <script>
   document.querySelector('cron-picker').addEventListener('change', (e) => {
@@ -33,11 +40,40 @@ pnpm add cron-picker
 </script>
 ```
 
+### 高级模式
+
+```html
+<!-- 高级模式：完整的 Cron 配置 -->
+<cron-picker mode="advanced" value="0 0 12 * * *"></cron-picker>
+```
+
+## 模式说明
+
+### 简易模式
+
+简易模式提供友好的用户界面，包含：
+- **时间选择器**：直观的时间输入
+- **重复规则**：
+  - 仅一次
+  - 每天
+  - 工作日（周一至周五）
+  - 周末（周六、周日）
+  - 自定义星期
+- **实时预览**：显示当前配置的人类可读描述
+
+### 高级模式
+
+高级模式提供完整的 Cron 表达式配置：
+- **每个字段独立配置**：秒、分、时、日、月、周
+- **多种模式**：每个、间隔、范围、指定
+- **精确控制**：满足复杂的定时需求
+
 ## 属性
 
 | 属性 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
 | `value` | `string` | `* * * * * *` | Cron 表达式（6段式） |
+| `mode` | `'simple' \| 'advanced'` | `'simple'` | UI 模式 |
 | `headless` | `boolean` | `false` | 无头模式，禁用默认样式 |
 | `hide-expression` | `boolean` | `false` | 隐藏表达式展示区 |
 | `hide-tabs` | `boolean` | `false` | 隐藏标签页 |
@@ -55,6 +91,9 @@ pnpm add cron-picker
 
 ```javascript
 const picker = document.querySelector('cron-picker')
+
+// 获取人类可读描述
+picker.getDescription()  // '每天 8:00 触发'
 
 // 设置字段模式
 picker.setFieldMode('second', 'interval')

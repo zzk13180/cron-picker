@@ -1,7 +1,7 @@
 {
   "name": "cron-picker",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Web Component for generating cron expressions",
   "license": "MIT",
   "author": "zhangzhankui <zzk13180@gmail.com>",
