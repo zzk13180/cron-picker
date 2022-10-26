@@ -3,418 +3,387 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cron-picker - Material Design 3</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>Cron Picker</title>
   <script type="module" src="/src/cron-picker.ts"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Roboto', system-ui, -apple-system, sans-serif;
-      background: #F7F2FA;
-      min-height: 100vh;
-      padding: 16px;
+    :root {
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-secondary: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
     }
 
-    /* 移动优先：默认针对手机 */
-    .page {
-      max-width: 600px;
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 0;
+    }
+
+    .layout {
+      max-width: 1280px;
       margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    header {
+      padding: 60px 20px 40px;
+      text-align: center;
     }
 
     h1 {
-      font-size: 28px;
-      font-weight: 400;
-      color: #1C1B1F;
-      margin-bottom: 4px;
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.05rem;
+      margin: 0 0 16px;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .subtitle {
-      color: #49454F;
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
       margin-bottom: 24px;
-      font-size: 14px;
-    }
-
-    .section {
-      background: #FFFBFE;
-      border-radius: 12px;
-      padding: 0;
-      margin-bottom: 16px;
-      box-shadow: 0 1px 3px 1px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.3);
-      overflow: hidden;
-    }
-
-    .section-header {
-      padding: 16px 20px;
-      background: #F3EDF7;
-    }
-
-    .section h2 {
-      font-size: 14px;
-      font-weight: 500;
-      color: #49454F;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .section-content {
-      padding: 0;
-    }
-
-    .result {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 16px 20px;
-      background: #F3EDF7;
     }
 
-    .result-label {
-      color: #49454F;
+    /* 响应式操场 */
+    .playground-card {
+      background: var(--surface);
+      border-radius: 20px;
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .resize-area {
+      padding: 40px;
+      background-color: #f1f5f9;
+      background-image: 
+        linear-gradient(45deg, #e2e8f0 25%, transparent 25%), 
+        linear-gradient(-45deg, #e2e8f0 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #e2e8f0 75%), 
+        linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+    }
+
+    .resizable-wrapper {
+      width: 100%;
+      min-width: 350px;
+      max-width: 1000px;
+      margin: 0 auto;
+      resize: horizontal;
+      overflow: hidden;
+      position: relative;
+      padding-bottom: 24px; /* Handle space */
+      transition: width 0.1s;
+    }
+
+    .resizable-wrapper::after {
+      content: '↔ 拖拽右下角调整宽度，测试响应式布局';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      text-align: center;
+      background: rgba(0,0,0,0.05);
+      color: var(--text-secondary);
       font-size: 12px;
+      padding: 4px;
+      border-radius: 4px;
       font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
-    .result-value {
-      font-family: 'Roboto Mono', ui-monospace, monospace;
-      font-size: 14px;
-      font-weight: 500;
-      color: #6750A4;
-      flex: 1;
+    .component-host {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      overflow: hidden;
     }
 
-    .copy-btn {
-      height: 36px;
-      padding: 0 16px;
-      border: none;
-      border-radius: 8px;
-      background: #E8DEF8;
-      color: #1D192B;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .copy-btn:hover {
-      background: #D0BCFF;
-    }
-
-    .copy-btn:active {
-      transform: scale(0.98);
-    }
-
-    .copy-btn.copied {
-      background: #6750A4;
-      color: white;
-    }
-
-    /* 自定义样式示例 */
-    .custom-theme {
-      --md-sys-color-primary: #006A6A;
-      --md-sys-color-on-primary: #FFFFFF;
-      --md-sys-color-primary-container: #6FF7F6;
-      --md-sys-color-on-primary-container: #002020;
-      --md-sys-color-secondary-container: #CCE8E7;
-    }
-
-    /* API 演示区 */
-    .api-demo {
+    .controls {
+      padding: 20px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
       display: flex;
-      gap: 8px;
+      gap: 16px;
+      align-items: center;
       flex-wrap: wrap;
-      padding: 16px 20px;
     }
 
-    .api-btn {
-      height: 40px;
-      padding: 0 24px;
-      border: 1px solid #CAC4D0;
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 8px 16px;
       border-radius: 8px;
-      background: transparent;
-      color: #6750A4;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text-secondary);
+      font-weight: 600;
       font-size: 14px;
-      font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
     }
 
-    .api-btn:hover {
-      background: #E8DEF8;
+    .btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
     }
 
-    .api-btn:active {
-      transform: scale(0.98);
+    .btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
     }
 
-    .log {
-      margin: 0;
-      padding: 16px 20px;
-      background: linear-gradient(135deg, #1a1625 0%, #1C1B1F 50%, #1e1a24 100%);
-      font-family: 'Roboto Mono', ui-monospace, monospace;
-      font-size: 13px;
-      color: #E6E1E5;
-      max-height: 180px;
-      overflow: auto;
-      border-top: 1px solid rgba(208, 188, 255, 0.1);
+    /* 场景 Grid */
+    .scenarios {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 32px;
     }
 
-    .log:empty::before {
-      content: '暂无日志记录...';
-      color: #79747E;
-      font-style: italic;
-    }
-
-    .log-item {
+    .scenario-item {
       display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 10px 14px;
-      margin: 6px 0;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 8px;
-      border-left: 3px solid #D0BCFF;
-      transition: all 0.2s ease;
-      animation: slideIn 0.3s ease-out;
+      flex-direction: column;
+      gap: 16px;
     }
 
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateX(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
+    .mock-window {
+      background: var(--surface);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      display: flex;
+      flex-direction: column;
+      height: 500px;
     }
 
-    .log-item:hover {
-      background: rgba(208, 188, 255, 0.08);
+    .mock-header {
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 6px;
     }
 
-    .log-item:first-child {
-      border-left-color: #6750A4;
-      background: rgba(103, 80, 164, 0.12);
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #cbd5e1; }
+    .dot.red { background: #fee2e2; border: 1px solid #fecaca; }
+    .dot.yellow { background: #fef9c3; border: 1px solid #fde047; }
+    .dot.green { background: #dcfce7; border: 1px solid #86efac; }
+    
+    .mock-body {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
     }
 
-    .log-time {
-      color: #938F99;
-      font-size: 11px;
-      font-weight: 500;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 2px 8px;
-      border-radius: 4px;
-      white-space: nowrap;
+    /* 侧边栏场景 */
+    .sidebar-layout {
+      display: flex;
+      height: 100%;
+    }
+    .sidebar {
+      width: 320px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+    .sidebar-title { padding: 20px; font-weight: bold; font-size: 14px; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+    .sidebar-content { flex: 1; overflow-y: auto; padding: 0; }
+    .main-area { flex: 1; background: #f1f5f9; padding: 32px; }
+    .skeleton { height: 200px; background: #cbd5e1; border-radius: 12px; opacity: 0.2; }
+
+    /* 弹窗场景 */
+    .dialog-overlay {
+      background: rgba(0,0,0,0.5);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .dialog-box {
+      width: 100%;
+      max-width: 400px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      max-height: 100%;
+    }
+    .dialog-header { padding: 16px 20px; font-weight: bold; border-bottom: 1px solid var(--border); }
+    .dialog-content { padding: 0; overflow-y: auto; }
+    .dialog-footer { padding: 12px 20px; border-top: 1px solid var(--border); text-align: right; }
+
+    /* 代码展示 */
+    .value-display {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 1.1rem;
+      color: var(--primary);
+      font-weight: 700;
+      padding: 8px 16px;
+      background: #eff6ff;
+      border-radius: 6px;
+      border: 1px solid #dbeafe;
     }
 
-    .log-action {
-      color: #CAC4D0;
-      font-weight: 500;
-    }
-
-    .log-value {
-      color: #D0BCFF;
-      font-weight: 600;
-      background: rgba(208, 188, 255, 0.1);
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-
-    /* 平板及以上响应式 */
-    @media (min-width: 600px) {
-      body {
-        padding: 24px;
-      }
-
-      .page {
-        max-width: 840px;
-      }
-
-      h1 {
-        font-size: 32px;
-      }
-
-      .section {
-        margin-bottom: 24px;
-      }
-    }
-
-    /* 桌面响应式 */
-    @media (min-width: 905px) {
-      body {
-        padding: 40px;
-      }
-
-      .page {
-        max-width: 1200px;
-      }
-
-      h1 {
-        font-size: 36px;
-      }
-
-      .subtitle {
-        font-size: 16px;
-        margin-bottom: 32px;
-      }
+    @media (max-width: 640px) {
+      h1 { font-size: 2rem; }
+      .resize-area { padding: 20px; }
+      .scenarios { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
+
+<div class="layout">
+  <header>
     <h1>Cron Picker</h1>
-    <p class="subtitle">Material Design 3 风格的 Cron 表达式选择器</p>
+    <p class="subtitle">现代化、响应式、无依赖的 Cron 表达式生成组件。</p>
+  </header>
 
-    <!-- 简易模式演示 -->
-    <div class="section">
-      <div class="section-header">
-        <h2>简易模式</h2>
+  <!-- 动态响应式演示 -->
+  <section>
+    <div class="playground-card">
+      <div class="resize-area">
+        <div class="resizable-wrapper" id="resize-wrapper">
+          <div class="component-host">
+            <cron-picker id="playground-picker" mode="advanced"></cron-picker>
+          </div>
+        </div>
       </div>
-      <div class="section-content">
-        <cron-picker id="simple-mode" mode="simple" value="0 0 8 * * *"></cron-picker>
+      <div class="controls">
+        <div class="control-group">
+          <span style="font-size: 14px; font-weight:600; color:var(--text-secondary)">预设宽度:</span>
+          <button class="btn" onclick="resize(360)">360px (窄屏)</button>
+          <button class="btn" onclick="resize(600)">600px (平板)</button>
+          <button class="btn active" onclick="resize('100%')">100% (自适应)</button>
+        </div>
+        <div style="flex:1"></div>
+        <div class="value-display" id="playground-value">* * * * * *</div>
       </div>
-      <div class="result">
-        <span class="result-label">表达式</span>
-        <span class="result-value" id="simple-value">0 0 8 * * *</span>
-        <button class="copy-btn" data-target="simple-value">复制</button>
+    </div>
+  </section>
+
+  <div class="scenarios">
+    <!-- 场景 1: 侧边栏应用 -->
+    <div class="scenario-item">
+      <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+        侧边栏集成 (Compact)
+      </h2>
+      <div class="mock-window">
+        <div class="mock-header">
+          <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        </div>
+        <div class="mock-body sidebar-layout">
+          <div class="sidebar">
+            <div class="sidebar-title">定时任务配置</div>
+            <div class="sidebar-content">
+              <!-- 这里强制开启紧凑模式 -->
+              <cron-picker mode="advanced" compact></cron-picker>
+            </div>
+          </div>
+          <div class="main-area">
+            <div class="skeleton"></div>
+            <div class="skeleton" style="margin-top: 20px; height: 100px"></div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 高级模式演示 -->
-    <div class="section">
-      <div class="section-header">
-        <h2>高级模式</h2>
+    <!-- 场景 2: 弹窗对话框 -->
+    <div class="scenario-item">
+      <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        弹窗面板 (Fixed Height)
+      </h2>
+      <div class="mock-window" style="background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'); background-size: cover;">
+        <div class="dialog-overlay">
+          <div class="dialog-box">
+            <div class="dialog-header">设置执行时间</div>
+            <div class="dialog-content">
+              <!-- 移动/窄屏优化 -->
+              <cron-picker mode="simple" compact></cron-picker>
+            </div>
+            <div class="dialog-footer">
+              <button class="btn active">保存配置</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="section-content">
-        <cron-picker id="advanced-mode" mode="advanced" value="0 0 12 * * *"></cron-picker>
-      </div>
-      <div class="result">
-        <span class="result-label">表达式</span>
-        <span class="result-value" id="advanced-value">0 0 12 * * *</span>
-        <button class="copy-btn" data-target="advanced-value">复制</button>
-      </div>
-    </div>
-
-    <!-- 自定义主题 -->
-    <div class="section">
-      <div class="section-header">
-        <h2>自定义主题色</h2>
-      </div>
-      <div class="section-content">
-        <cron-picker class="custom-theme" id="custom" mode="simple" value="0 30 9 * * 1-5"></cron-picker>
-      </div>
-      <div class="result">
-        <span class="result-label">表达式</span>
-        <span class="result-value" id="custom-value">0 30 9 * * 1-5</span>
-        <button class="copy-btn" data-target="custom-value">复制</button>
-      </div>
-    </div>
-
-    <!-- API 演示 -->
-    <div class="section">
-      <div class="section-header">
-        <h2>API 演示</h2>
-      </div>
-      <div class="api-demo">
-        <button class="api-btn" id="btn-reset">重置</button>
-        <button class="api-btn" id="btn-every-minute">每分钟</button>
-        <button class="api-btn" id="btn-every-hour">每小时</button>
-        <button class="api-btn" id="btn-every-day">每天中午</button>
-        <button class="api-btn" id="btn-workday">工作日 9 点</button>
-      </div>
-      <div class="section-content">
-        <cron-picker id="api-demo" mode="advanced"></cron-picker>
-      </div>
-      <div class="log" id="log"></div>
     </div>
   </div>
 
-  <script type="module">
-    // 简易模式
-    const simpleMode = document.getElementById('simple-mode')
-    simpleMode.addEventListener('change', (e) => {
-      document.getElementById('simple-value').textContent = e.detail.value
-    })
+</div>
 
-    // 高级模式
-    const advancedMode = document.getElementById('advanced-mode')
-    advancedMode.addEventListener('change', (e) => {
-      document.getElementById('advanced-value').textContent = e.detail.value
-    })
+<script>
+  // Playground 逻辑
+  const wrapper = document.getElementById('resize-wrapper');
+  const picker = document.getElementById('playground-picker');
+  const valueDisplay = document.getElementById('playground-value');
+  const btns = document.querySelectorAll('.controls .btn');
 
-    // 自定义主题
-    const custom = document.getElementById('custom')
-    custom.addEventListener('change', (e) => {
-      document.getElementById('custom-value').textContent = e.detail.value
-    })
+  // 监听值变化
+  picker.addEventListener('change', (e) => {
+    valueDisplay.textContent = e.detail.value;
+  });
 
-    // API 演示
-    const apiDemo = document.getElementById('api-demo')
-    const log = document.getElementById('log')
-
-    function addLog(action, value) {
-      const time = new Date().toLocaleTimeString()
-      const item = document.createElement('div')
-      item.className = 'log-item'
-      item.innerHTML = `<span class="log-time">${time}</span><span class="log-action">${action}:</span> <span class="log-value">${value}</span>`
-      log.insertBefore(item, log.firstChild)
-      // 限制日志数量
-      while (log.children.length > 20) {
-        log.removeChild(log.lastChild)
-      }
+  // 调整宽度函数
+  window.resize = (width) => {
+    if (width === '100%') {
+      wrapper.style.width = '100%';
+      wrapper.style.maxWidth = '1000px';
+    } else {
+      wrapper.style.width = width + 'px';
+      wrapper.style.maxWidth = width + 'px'; // 强制 override
     }
+    
+    // 更新按钮状态
+    btns.forEach(btn => btn.classList.remove('active'));
+    const targetBtn = Array.from(btns).find(b => {
+      const w = typeof width === 'string' ? width : width + 'px';
+      return b.innerText.includes(typeof width === 'number' ? width : '自适应');
+    });
+    if (targetBtn) targetBtn.classList.add('active');
+  };
+</script>
 
-    apiDemo.addEventListener('change', (e) => {
-      addLog('变更', e.detail.value)
-    })
-
-    document.getElementById('btn-reset').addEventListener('click', () => {
-      apiDemo.reset()
-      addLog('重置', '* * * * * *')
-    })
-
-    document.getElementById('btn-every-minute').addEventListener('click', () => {
-      apiDemo.parse('0 * * * * *')
-      addLog('设置', '每分钟')
-    })
-
-    document.getElementById('btn-every-hour').addEventListener('click', () => {
-      apiDemo.parse('0 0 * * * *')
-      addLog('设置', '每小时')
-    })
-
-    document.getElementById('btn-every-day').addEventListener('click', () => {
-      apiDemo.parse('0 0 12 * * *')
-      addLog('设置', '每天中午')
-    })
-
-    document.getElementById('btn-workday').addEventListener('click', () => {
-      apiDemo.parse('0 0 9 * * 1-5')
-      addLog('设置', '工作日 9 点')
-    })
-
-    // 复制按钮
-    document.querySelectorAll('.copy-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const target = document.getElementById(btn.dataset.target)
-        try {
-          await navigator.clipboard.writeText(target.textContent)
-          btn.textContent = '已复制'
-          btn.classList.add('copied')
-          setTimeout(() => {
-            btn.textContent = '复制'
-            btn.classList.remove('copied')
-          }, 1500)
-        } catch (e) {
-          console.error('复制失败', e)
-        }
-      })
-    })
-  </script>
 </body>
 </html>
+

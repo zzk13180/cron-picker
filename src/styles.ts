@@ -33,6 +33,12 @@ export const cronPickerStyles = css`
     --cron-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
     --cron-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Spacing variables for responsive adjustment */
+    --cron-padding-base: 24px;
+    --cron-padding-sm: 16px;
+    --cron-gap-base: 32px;
+    --cron-gap-sm: 16px;
 
     display: block;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -40,6 +46,17 @@ export const cronPickerStyles = css`
     line-height: 1.5;
     color: var(--cron-text-main);
     box-sizing: border-box;
+  }
+  
+  /* Compact mode - can be triggered by attribute or container query */
+  :host([compact]) {
+    --cron-radius-lg: 8px;
+    --cron-radius-md: 6px;
+    --cron-padding-base: 12px;
+    --cron-padding-sm: 8px;
+    --cron-gap-base: 16px;
+    --cron-gap-sm: 8px;
+    font-size: 13px;
   }
 
   * { box-sizing: border-box; }
@@ -52,7 +69,10 @@ export const cronPickerStyles = css`
     border: 1px solid var(--cron-border);
     overflow: hidden;
     max-width: 100%;
+    max-height: 100%;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
   }
 `
 
@@ -68,9 +88,10 @@ export const simpleModeStyles = css`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 24px;
+    padding: 12px var(--cron-padding-base);
     border-bottom: 1px solid var(--cron-border);
     background: var(--cron-bg-background);
+    flex-shrink: 0;
   }
 
   .status-info {
@@ -122,10 +143,13 @@ export const simpleModeStyles = css`
 
   /* Content */
   .simple-content {
-    padding: 24px;
+    padding: var(--cron-padding-base);
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: var(--cron-gap-base);
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
   }
 
   /* Live Preview */
@@ -159,10 +183,12 @@ export const timePickerStyles = css`
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 20px 28px;
+    padding: 16px 20px;
     background: var(--cron-bg-background);
     border-radius: var(--cron-radius-lg);
     border: 1px solid var(--cron-border);
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .time-select-group {
@@ -382,12 +408,13 @@ export const presetStyles = css`
 /** 高级模式样式 */
 export const advancedModeStyles = css`
   .advanced-header {
-    padding: 20px 24px;
+    padding: 16px var(--cron-padding-base);
     background: var(--cron-bg-background);
     border-bottom: 1px solid var(--cron-border);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-shrink: 0;
   }
 
   .simple-title {
@@ -398,12 +425,13 @@ export const advancedModeStyles = css`
   }
 
   .expression {
-    padding: 16px 24px;
+    padding: 12px var(--cron-padding-base);
     background: var(--cron-bg-surface);
     border-bottom: 1px solid var(--cron-border);
     display: flex;
     gap: 8px;
     overflow-x: auto;
+    flex-shrink: 0;
   }
 
   .segment {
@@ -431,17 +459,29 @@ export const advancedModeStyles = css`
   /* Tabs */
   .tabs {
     display: flex;
-    padding: 0 24px;
+    padding: 0 var(--cron-padding-base);
     border-bottom: 1px solid var(--cron-border);
     overflow-x: auto;
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    flex-shrink: 0;
   }
 
-  .tabs::-webkit-scrollbar { display: none; }
+  .tabs::-webkit-scrollbar { 
+    height: 4px;
+  }
+  
+  .tabs::-webkit-scrollbar-thumb {
+    background: var(--cron-border);
+    border-radius: 2px;
+  }
+  
+  .tabs::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
   .tab {
-    padding: 16px 4px;
-    margin-right: 24px;
+    padding: 12px 4px;
+    margin-right: 16px;
     background: none;
     border: none;
     border-bottom: 2px solid transparent;
@@ -464,7 +504,11 @@ export const advancedModeStyles = css`
 
   /* Panel */
   .panel {
-    padding: 24px;
+    padding: var(--cron-padding-base);
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    max-height: calc(100vh - 200px);
   }
 
   /* Modes */
@@ -539,16 +583,24 @@ export const optionsStyles = css`
   /* Grid */
   .grid {
     display: grid;
-    gap: 8px;
-    margin-top: 16px;
+    gap: 6px;
+    margin-top: 12px;
   }
 
+  /* Default: smaller screens */
   .cols-6 { grid-template-columns: repeat(6, 1fr); }
   .cols-7 { grid-template-columns: repeat(7, 1fr); }
-  .cols-10 { grid-template-columns: repeat(5, 1fr); }
+  .cols-10 { grid-template-columns: repeat(6, 1fr); }
 
+  /* Medium screens (480px+) */
+  @media (min-width: 480px) {
+    .cols-10 { grid-template-columns: repeat(8, 1fr); }
+  }
+
+  /* Large screens (640px+) */
   @media (min-width: 640px) {
     .cols-10 { grid-template-columns: repeat(10, 1fr); }
+    .grid { gap: 8px; }
   }
 
   .cell {
@@ -566,10 +618,10 @@ export const optionsStyles = css`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 36px;
+    height: 32px;
     border: 1px solid var(--cron-border);
     border-radius: var(--cron-radius-sm);
-    font-size: 13px;
+    font-size: 12px;
     color: var(--cron-text-secondary);
     cursor: pointer;
     transition: var(--cron-transition);
@@ -614,6 +666,271 @@ export const optionsStyles = css`
   }
 `
 
+/** 响应式媒体查询样式 */
+export const responsiveStyles = css`
+  /* 小屏幕适配 (宽度 < 600px) */
+  @media (max-width: 600px) {
+    :host {
+      font-size: 13px;
+      --cron-padding-base: 16px;
+      --cron-gap-base: 16px;
+    }
+
+    /* 减小各区域内边距 */
+    .advanced-header,
+    .status-bar {
+      padding: 10px 16px;
+    }
+
+    .tabs {
+      padding: 0 16px;
+    }
+
+    .panel,
+    .simple-content {
+      padding: 16px;
+    }
+    
+    .expression {
+      padding: 10px 16px;
+    }
+
+    .time-picker-container {
+      padding: 12px 16px;
+    }
+
+    /* 时间选择器数字变小 */
+    .time-select select {
+      font-size: 22px;
+      width: 64px;
+      padding: 10px 6px;
+    }
+
+    .time-select.period select {
+      width: 60px;
+      font-size: 14px;
+      padding: 12px 6px;
+    }
+
+    .time-separator {
+      font-size: 26px;
+      margin: 12px 2px 0;
+    }
+
+    /* Tab 优化 */
+    .tab {
+      padding: 10px 2px;
+      margin-right: 12px;
+      font-size: 13px;
+    }
+
+    /* Grid 单元格更加紧凑 */
+    .cell label {
+      height: 30px;
+      font-size: 11px;
+    }
+
+    /* 预设 Chip 变更为 2 列 */
+    .preset-chips {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .preset-chip {
+      padding: 12px;
+      gap: 6px;
+    }
+
+    .preset-chip svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* 预览文字 */
+    .preview-description {
+      font-size: 16px;
+    }
+
+    /* 星期选择器 */
+    .weekday-item {
+      height: 40px;
+    }
+
+    .weekday-name {
+      font-size: 12px;
+    }
+
+    /* 模式选择 */
+    .modes {
+      margin-bottom: 16px;
+    }
+
+    .mode-btn {
+      padding: 6px;
+      font-size: 12px;
+    }
+
+    /* Actions */
+    .actions {
+      margin-top: 16px;
+      padding-top: 12px;
+      gap: 8px;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    /* 标题 */
+    .simple-title {
+      font-size: 16px;
+    }
+
+    .section-label {
+      font-size: 11px;
+    }
+  }
+
+  /* 超小屏幕适配 (宽度 < 400px) */
+  @media (max-width: 400px) {
+    :host {
+      font-size: 12px;
+      --cron-padding-base: 12px;
+      --cron-gap-base: 12px;
+    }
+
+    /* 网格强制调整 */
+    .cols-10 { grid-template-columns: repeat(5, 1fr); }
+    .cols-7 { grid-template-columns: repeat(4, 1fr); }
+    .cols-6 { grid-template-columns: repeat(3, 1fr); }
+
+    .cell label {
+      height: 28px;
+      font-size: 10px;
+    }
+
+    /* Tab 栏 */
+    .tabs {
+      gap: 4px;
+      padding: 0 12px;
+    }
+    
+    .tab {
+      margin-right: 8px;
+      font-size: 12px;
+      padding: 8px 2px;
+    }
+
+    /* 时间选择器进一步缩小 */
+    .time-select select {
+      font-size: 18px;
+      width: 52px;
+      padding: 8px 4px;
+    }
+
+    .time-select.period select {
+      width: 52px;
+      font-size: 12px;
+      padding: 10px 4px;
+    }
+
+    .time-separator {
+      font-size: 20px;
+      margin: 10px 2px 0;
+    }
+
+    .time-picker-container {
+      padding: 10px 12px;
+      gap: 8px;
+    }
+
+    /* 其他调整 */
+    .advanced-header,
+    .status-bar {
+      padding: 8px 12px;
+    }
+
+    .panel,
+    .simple-content {
+      padding: 12px;
+    }
+
+    .expression {
+      padding: 8px 12px;
+    }
+
+    .segment {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    .preset-chip {
+      padding: 10px;
+      gap: 4px;
+    }
+
+    .preset-chip svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .preview-description {
+      font-size: 14px;
+    }
+
+    .weekday-grid {
+      gap: 4px;
+    }
+
+    .weekday-item {
+      height: 36px;
+    }
+
+    .weekday-name {
+      font-size: 11px;
+    }
+
+    .mode-toggle {
+      padding: 4px 8px;
+      font-size: 11px;
+      gap: 4px;
+    }
+
+    .mode-toggle svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .simple-title {
+      font-size: 14px;
+    }
+  }
+
+  /* 高度限制适配 (高度 < 500px) */
+  @media (max-height: 500px) {
+    .panel {
+      max-height: calc(100vh - 180px);
+    }
+
+    .simple-content {
+      gap: 12px;
+    }
+
+    .time-picker-container {
+      padding: 10px 16px;
+    }
+
+    .preset-chip {
+      padding: 10px;
+    }
+
+    .weekday-item {
+      height: 36px;
+    }
+  }
+`
+
 /** 所有样式合集 */
 export const allStyles = [
   cronPickerStyles,
@@ -622,4 +939,5 @@ export const allStyles = [
   presetStyles,
   advancedModeStyles,
   optionsStyles,
+  responsiveStyles,
 ]
